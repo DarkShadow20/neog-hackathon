@@ -2,8 +2,9 @@ import React from 'react'
 import { Message } from '../Message/Message'
 import "./Room.css"
 
-export const Room = () => {
-
+export const Room = (props) => {
+    const {items}=props;
+    console.log(items)
     const users = [
         {
             id: "abc",

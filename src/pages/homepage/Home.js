@@ -1,6 +1,6 @@
 import "./Home.css";
 import NavBar from '../../components/NavBar';
-
+import { Link } from 'react-router-dom';
 export const rooms=[{
     id:1,
     name:"neog",
@@ -39,11 +39,17 @@ function Home() {
             <NavBar/>
             <div className="room-section">
                 {rooms.map((items)=>(
-                    <div className="rooms">
-                        Channel Name: {items.name}<br/>
-                        Admin Name: {items.admin}<br/>
-                        Total Participants: {items.participant}
-                    </div>
+                    <Link to={{
+                        pathname:'/room',
+                        state:{items:items}
+                        }}
+                        >
+                        <div className="rooms"  key={items.id}>
+                            Channel Name: {items.name}<br/>
+                            Admin Name: {items.admin}<br/>
+                            Total Participants: {items.participant}
+                        </div>
+                    </Link>
                 ))}
             <footer>
                 <button className="create-room">Create Room</button>

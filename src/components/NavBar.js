@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 
 function NavBar() {
     const [showLinks,setShowLinks]=useState(false)
-    const { isUserLoggedIn, setLogin,userName } = useAuth();
+    const { isUserLoggedIn, setLogin} = useAuth();
     const navigate=useNavigate();
     return (
              <>
@@ -18,7 +18,7 @@ function NavBar() {
                                   <>
                                   <button className="username"
                                     >
-                                      <div>Hi {userName}</div>
+                                      <div>Hi</div>
                                     </button>
                                     <button
                                       onClick={() => {

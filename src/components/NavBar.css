@@ -1,0 +1,90 @@
+:root{
+    --back-color:#2B2B31;
+}
+*{
+    margin:0px;
+    padding: 0px;
+    box-sizing: border-box;
+    background-color: var(--back-color);
+}
+nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 5rem;
+    background-color: var(--back-color);
+    color: var(--color1);
+    box-shadow: 0px 2px 1px rgba(0,0,0,0.2);
+    
+}
+.Logo{
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.4rem;
+}
+.link{
+    display: flex;
+}
+button{
+    display: flex;
+    justify-content: space-around; 
+    color: var(--color1);
+    padding-left: 1rem;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+button .username{
+    justify-content: space-between;
+}
+.rightSide button{
+    display: none;
+}
+
+.leftSide #hidden{
+    display: flex;   
+}
+.video-section{
+    color: var(--color1);
+    margin-top: 2rem;
+    margin-left: 14rem;
+}
+.videos{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+@media screen and (max-width:768px){
+    @keyframes animate{
+        0%{width: 0%;}
+        100%{width: 50%;}
+    }
+    .video-section{
+        margin-top: 10rem;
+    }
+    .rightSide button{
+        display: flex;
+    }
+    .link {
+        display: none;
+    }
+    .leftSide #hidden{
+        position: absolute;
+        right:1rem;
+        top: 7rem;
+        height: 100%;
+        width: 50%;
+        color: var(--color1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0px 2px 1px rgba(0,0,0,0.2);
+        z-index: 2;
+        animation-name: animate;
+        animation-duration: 2s;
+    }
+}

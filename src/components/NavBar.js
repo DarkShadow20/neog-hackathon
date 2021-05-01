@@ -47,6 +47,13 @@ function NavBar() {
                                     </button>
                                     <button
                                       onClick={() => {
+                                        navigate("/room");
+                                      }}
+                                    >
+                                      <div>Room</div>
+                                    </button>
+                                    <button
+                                      onClick={() => {
                                         navigate("/");
                                       }}
                                     >

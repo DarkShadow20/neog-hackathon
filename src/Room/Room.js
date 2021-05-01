@@ -34,7 +34,7 @@ export const Room = (props) => {
     ]
 
     const currentUser = {
-        userId: "abc",
+        userId: "abc2",
         name: "Rupam",
         email: "rupam@gmail.com",
         password: "123456"
@@ -43,7 +43,7 @@ export const Room = (props) => {
     const readers = ["abc","abc1","admin"]
 
     const accessMembers = ["abc", "abc1", "admin"]
-
+    const primeMember=accessMembers.find((items)=>items===currentUser.userId)
     const mesasges = [
         {
             text: "I love react",
@@ -116,16 +116,11 @@ export const Room = (props) => {
                         return <Message message={message} userId={currentUser.userId} key={idx}/>
                     })}
                 </div>
-                {accessMembers.map(member => {
-                        if(member === currentUser.userId){
-                            return <div className="input-group mb-3 message">
+                {primeMember?<div className="input-group mb-3 message">
                                         <input className="form-control" placeholder="Type a message"/>
                                         <button className="btn btn-primary">Send</button>
                                     </div>
-                        }
-                        return null
-                    })
-                }
+                        :<button>Raise Hand</button>}
             </div>
             <div className="room-right-section">
                 <h2>Readers</h2>

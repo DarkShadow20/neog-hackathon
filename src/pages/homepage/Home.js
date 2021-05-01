@@ -39,10 +39,12 @@ function Home() {
             <NavBar/>
             <div className="room-section">
                 {rooms.map((items)=>(
-                    <Link to={{
-                        pathname:'/room',
-                        state:{items:items}
-                        }}
+                    <Link
+                    state={{
+                      from: items
+                    }}
+                    replace
+                    to="/room"
                         >
                         <div className="rooms"  key={items.id}>
                             Channel Name: {items.name}<br/>

@@ -1,10 +1,11 @@
 import React from 'react'
 import { Message } from '../Message/Message'
+import {useLocation} from "react-router-dom";
 import "./Room.css"
 
 export const Room = (props) => {
-    const {items}=props;
-    console.log(items)
+    const location = useLocation();
+    console.log(location.state)
     const users = [
         {
             id: "abc",

@@ -1,0 +1,36 @@
+.room-container{
+    width: 70vw;
+    min-height: 95vh;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    background-color: rgb(37, 37, 37);
+    color: white;
+}
+.room-container h2{
+    padding: 1rem;
+    border-bottom: 1px solid white;
+}
+.room-left-section{
+    position: relative;
+}
+
+.chat-area{
+    padding: 1rem;
+}
+.input-group.message{
+    position: absolute;
+    bottom: 0;
+}
+.room-right-section{
+    padding: 0 1rem;
+    border-left: 1px solid white;
+}
+.reader-list{
+    text-align: start;
+    padding: 1rem;
+}
+.reader{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    margin-top: 0.5rem;
+}

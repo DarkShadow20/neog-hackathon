@@ -1,0 +1,19 @@
+.message-right{
+    width: 100%;
+    text-align: end;
+}
+.message-left{
+    text-align: start;
+    
+}
+.user-message{
+    display: inline-block;
+    border-radius: 0.5rem;
+    color: black;
+    background-color: rgb(199, 199, 199);
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    margin-top: 0.2rem;
+}
+.user-message h6{
+    color: green;
+}

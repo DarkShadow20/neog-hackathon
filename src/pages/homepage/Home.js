@@ -1,39 +1,45 @@
 import "./Home.css";
 import NavBar from '../../components/NavBar';
 import { Link } from 'react-router-dom';
+import {useRef, useState} from "react";
+
 export const rooms=[{
     id:1,
-    name:"neog",
-    admin:"Tanay",
-    participant:20
+    topic:"Simply Gaming",
+    adminId:"Sumit",
+    readers:[],
+    accessMembers:[],
+    Messages:[]
 },{
     id:2,
-    name:"teamtanay",
-    admin:"Tanay",
-    participant:50
+    topic:"avalon meet",
+    adminId:"Varun",
+    readers:[],
+    accessMembers:[],
+    Messages:[]
 },{
     id:3,
-    name:"mico",
-    admin:"Mihir",
-    participant:10
+    topic:"Songs",
+    adminId:"Kunal",
+    readers:[],
+    accessMembers:[],
+    Messages:[]
 },{
     id:4,
-    name:"Simply Gaming",
-    admin:"Sumit",
-    participant:30
-},{
-    id:5,
-    name:"avalon meet",
-    admin:"Varun",
-    participant:45
-},{
-    id:6,
-    name:"Songs",
-    admin:"Kunal",
-    participant:10
+    topic:"Reading",
+    adminId:"Bill",
+    readers:[],
+    accessMembers:[],
+    Messages:[]
 }]
 
 function Home() {
+    const divRef=useRef(null)
+    const inputRef=useRef(null)
+    const [text,setText]=useState("");
+    function clickHandler(){
+        
+    }
     return (
         <>
             <NavBar/>
@@ -47,14 +53,40 @@ function Home() {
                     to="/room"
                         >
                         <div className="rooms"  key={items.id}>
-                            Channel Name: {items.name}<br/>
-                            Admin Name: {items.admin}<br/>
-                            Total Participants: {items.participant}
+                            Channel Name: {items.topic}<br/>
+                            Admin Name: {items.adminId}<br/>
+                            Participants: {items.readers.length}
                         </div>
                     </Link>
                 ))}
             <footer>
-                <button className="create-room">Create Room</button>
+                <div className="wrapper">
+                    <button className="create-btnroom" onClick={()=>{divRef.current.style.display="block";inputRef.current.focus();}}>Create Room</button>
+                    <div  ref={divRef} className="create-room" style={{display:"none"}}>
+                       Topic <input className="topic-name" type="text" placeholder="new room" ref={inputRef} value={text}
+                        onChange={(e) => setText(e.target.value)}/>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <button
+                                onClick={() => {
+                                divRef.current.style.display = "none";
+                                setText("");
+                                }}
+                            >
+                                x
+                            </button>
+                        <button
+                            onClick={() => {
+                            divRef.current.style.display = "none";
+                            if (text !== "") {
+                                setText("");
+                            clickHandler()}
+                            }}
+                        >
+                            Create
+                        </button>
+                        </div>
+                    </div>
+                </div>
             </footer>
             </div>
         </>

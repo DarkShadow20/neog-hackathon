@@ -33,6 +33,7 @@ export const Login = () => {
           }
          setLogin(res.data.success);
           if (res.data.success) {
+            console.log(location.state.from)
             navigate(location?.state?.from ? location.state.from : "/");
           }
          setUserName(res.data.name);
@@ -61,9 +62,6 @@ export const Login = () => {
         <Navigate to={location?.state?.from ? location.state.from : "/"} />
       )}
       <h1>Login</h1>
-
-      
-
       <div className="login-inputWrapper">
         <label>
           Email

@@ -18,6 +18,12 @@ export const Room = () => {
             password: "123456"
         },
         {
+            id: "abc2",
+            name: "Ram",
+            email: "ram@gmail.com",
+            password: "123456"
+        },
+        {
             id: "admin",
             name: "Admin",
             email: "admin@gmail.com",
@@ -34,7 +40,7 @@ export const Room = () => {
 
     const readers = ["abc","abc1","admin"]
 
-    const accessMembers = ["abc", "abc1"]
+    const accessMembers = ["abc", "abc1", "admin"]
 
     const mesasges = [
         {
@@ -67,6 +73,37 @@ export const Room = () => {
             timestamp: 5,
             name: "Kunal"
         },
+        {
+            text: "All of you. Give valid points",
+            userId: "admin",
+            timestamp: 6,
+            name: "Admin"
+        },
+        {
+            text: "Ok. we are deviating",
+            userId: "abc1",
+            timestamp: 7,
+            name: "Kunal"
+        },
+        {
+            text: "Ok give some advantages over that",
+            userId: "abc",
+            timestamp: 8,
+            name: "Rupam"
+        },
+        {
+            text: "and some disadvantages too",
+            userId: "abc",
+            timestamp: 9,
+            name: "Rupam"
+        },
+        {
+            text: "Here are some advantages",
+            userId: "abc1",
+            timestamp: 10,
+            name: "Kunal"
+        },
+
     ]
     return (
         <div className="room-container">
@@ -80,8 +117,8 @@ export const Room = () => {
                 {accessMembers.map(member => {
                         if(member === currentUser.userId){
                             return <div className="input-group mb-3 message">
-                                    <input className="form-control" placeholder="Type a message"/>
-                                    <button className="btn btn-primary">Send</button>
+                                        <input className="form-control" placeholder="Type a message"/>
+                                        <button className="btn btn-primary">Send</button>
                                     </div>
                         }
                         return null
@@ -95,7 +132,7 @@ export const Room = () => {
                         return readers.map(reader => {
                             if(reader === user.id){
                                 return <div className="reader">
-                                            <h4>{user.name}</h4>
+                                            <h5>{user.name}</h5>
                                             <button className="btn btn-secondary">Access</button>
                                         </div>
                             }

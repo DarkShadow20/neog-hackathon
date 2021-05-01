@@ -9,6 +9,14 @@
     padding: 2rem;
     color: var(--color1);
 }
+.topic-name{
+    color: var(--color1);
+}
+.wrapper{
+    color: #fff;
+    display: flex;
+    
+}
 .create-room{
-    margin-left: 50rem;
+    color: #fff;
 }

@@ -26,6 +26,11 @@ export const rooms=[{
     name:"avalon meet",
     admin:"Varun",
     participant:45
+},{
+    id:6,
+    name:"Songs",
+    admin:"Kunal",
+    participant:10
 }]
 
 function Home() {

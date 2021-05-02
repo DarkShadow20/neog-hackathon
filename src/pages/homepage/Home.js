@@ -41,15 +41,62 @@ function Home() {
     const inputRef=useRef(null)
     const [text,setText]=useState("");
     const [rooms, setRooms] = useState([])
+    const [errorMessage, setErrorMessage] = useState("")
 
     const {userState,userDispatch} = useUser()
     const {currentUser} = userState
 
     const {userId} = useAuth()
     
-    function clickHandler(){
-        
+    const addRoomBtn = () => {
+        const newRoom = {
+            adminId: currentUser.userId,
+            adminName: currentUser.name,
+            topic: text,
+            accessMembers: [currentUser.userId],
+            readers: [{userId: currentUser.userId, name: currentUser.name}],
+            raisedHands: [],
+            messages:[]
+        }
+
+        const roomsRef = firebase.firestore().collection("rooms")
+        roomsRef.add(newRoom)
+        setText("")
     }
+
+    const removeRoomBtn = (desiredRoomId) => {
+        const foundRoom = rooms.find(room => room.roomId === desiredRoomId)
+        if(foundRoom.adminId === currentUser.userId){
+            const roomRef = firebase.firestore().collection("rooms").doc(desiredRoomId).delete()
+        }
+        else {
+            setErrorMessage("Only admin can delete this room")
+            alert("Only admin can delete this room")
+        }
+    }
+
+    const addToReadersBtn = (desiredRoomId) => {
+        const foundRoom = rooms.find(room => room.roomId === desiredRoomId)
+        if(foundRoom){
+            const alreadyReader = foundRoom.readers.find(reader => reader.userId === currentUser.userId)
+            if(alreadyReader){
+                return null
+            }
+            else {
+                const roomRef = firebase.firestore().collection("rooms").doc(desiredRoomId)
+                const newReader = {
+                    name: currentUser.name,
+                    userId: currentUser.userId
+                }
+                roomRef.update({
+                    readers: firebase.firestore.FieldValue.arrayUnion(newReader)
+                })
+            }
+        }else{
+            alert("Room not found")
+        }
+    }
+
 
     const fetchCurrentUser = (users) => {
         const foundUser = users.find(user => user.userId === userId)
@@ -96,19 +143,22 @@ function Home() {
             <NavBar/>
             <div className="room-section">
                 {rooms.map((items)=>(
-                    <Link
-                    state={{
-                      from: items
-                    }}
-                    replace
-                    to="/room"
-                        >
                         <div className="rooms" key={items.roomId}>
-                            Channel Name: {items.topic}<br/>
-                            Admin Name: {items.adminId}<br/>
-                            Participants: {items.readers.length}
+                            <div className="room-field">
+                                <p>Topic: </p>
+                                <p>{items.topic}</p>
+                            </div>
+                            <div className="room-field">
+                                <p>Admin: </p>
+                                <p>{items.adminName}</p>
+                            </div>
+                            <div className="room-field">
+                                <p>Readers: </p>
+                                <p>{items.readers.length}</p>
+                            </div>
+                            <Link state={{from: items}} replace to="/room" onClick={() => addToReadersBtn(items.roomId)}><button className="btn btn-warning entry" >Enter Room</button></Link>
+                            <button className="btn trash" onClick={() => removeRoomBtn(items.roomId)}>🗑️</button>
                         </div>
-                    </Link>
                 ))}
             <footer>
                 <div className="wrapper">
@@ -130,7 +180,7 @@ function Home() {
                             divRef.current.style.display = "none";
                             if (text !== "") {
                                 setText("");
-                            clickHandler()}
+                            addRoomBtn()}
                             }}
                         >
                             Create

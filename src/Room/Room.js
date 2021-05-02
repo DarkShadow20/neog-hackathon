@@ -7,10 +7,16 @@ import { useUser } from '../context';
 export const Room = (props) => {
     const location = useLocation();
     const [msg,setMsg]=useState();
+    const [permission,setPermission]=useState(false)
+    const [reader3,setReader3]=useState([])
     const {userState}=useUser();
     const {users,currentUser}=userState
     console.log(location.state.from)
-    const {accessMembers,readers,messages,topic}=location.state.from
+    const {accessMembers,readers,messages,topic,adminId}=location.state.from;
+
+    const newReaders=readers.map((items)=>({userId:items , isRaisedHand:false }))
+    //setReader3(newReaders)
+    console.log(newReaders)
     //console.log(accessMembers,readers,messages,users,currentUser)
     // const users = [
     //     {
@@ -127,11 +133,19 @@ export const Room = (props) => {
         dispatch({type:"ADD_MESSAGE",payload:{msg,primeMember,timeStamp}})
         setMsg("")
     }
+    const permissionHandler=(userId)=>{
+        newReaders.map((items)=>{
+            if(items.userId===userId){
+                return items.isRaisedHand=true;
+            }
+            return items
+        })
+    }
     const [state,dispatch]=useReducer(reducer,messages)
     return (
         <div className="room-container">
             <div className="room-left-section">
-                <h2>{topic}</h2>
+                <h2>{topic}{" "}{currentUser.name}</h2>
                 <div className="chat-area">
                     {state.map((message, idx) => {
                         return <Message message={message} userId={currentUser.userId} key={idx}/>
@@ -141,12 +155,12 @@ export const Room = (props) => {
                                         <input className="form-control" placeholder="Type a message" onChange={(e)=>setMsg(e.target.value)}/>
                                         <button className="btn btn-primary" onClick={()=>msgHandler(primeMember)}>Send</button>
                                     </div>
-                        :<button>Raise Hand</button>}
+                        :<button onClick={()=>permissionHandler(currentUser.userId)}>Raise Hand</button>}
             </div>
             <div className="room-right-section">
                 <h2>Readers</h2>
                 <div className="reader-list">
-                    {users.map(user => {
+                    {currentUser.userId === adminId ? <>{users.map(user => {
                         return readers.map(reader => {
                             if(reader === user.userId){
                                 return <div className="reader">
@@ -156,7 +170,20 @@ export const Room = (props) => {
                             }
                             return null
                         })
-                    })}
+                    })}</>: <>{users.map(user => {
+                        return newReaders.map(reader => {
+                            if(reader.userId === user.userId){
+                                return <div className="reader">
+                                            {reader.isRaisedHand && <p>✋</p>}
+                                            <h5>{user.name}</h5>
+                                        </div>
+                            }
+                            return null
+                        })
+                    })} </>}
+
+
+                   
                 </div>
             </div>
         </div>

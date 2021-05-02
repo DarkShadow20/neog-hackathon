@@ -25,7 +25,7 @@ function NavBar() {
                                   <>
                                   <button className="username"
                                     >
-                                      <div>Hi {currentUser.name}</div>
+                                      <div>Hi {currentUser?.name}</div>
                                     </button>
                                     <button
                                       onClick={() => {

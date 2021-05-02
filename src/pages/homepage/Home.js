@@ -3,6 +3,8 @@ import NavBar from '../../components/NavBar';
 import { Link } from 'react-router-dom';
 import {useEffect, useRef, useState} from "react";
 import firebase from "firebase/app";
+import { useUser } from "../../context";
+import { useAuth } from "../../hooks";
 
 export const roomsOld=[{
     id:1,
@@ -40,12 +42,24 @@ function Home() {
     const [text,setText]=useState("");
     const [rooms, setRooms] = useState([])
 
+    const {userState,userDispatch} = useUser()
+    const {currentUser} = userState
 
+    const {userId} = useAuth()
+    
     function clickHandler(){
         
     }
 
-    useEffect(async () => {
+    const fetchCurrentUser = (users) => {
+        const foundUser = users.find(user => user.userId === userId)
+        if(foundUser){
+            userDispatch({type: "LOAD_USER", payload: foundUser})
+        }
+        
+    }
+
+    const fetchDatas = async () => {
         try {
             const roomsRef = await firebase.firestore().collection("rooms")
             roomsRef.onSnapshot(snap => {
@@ -56,8 +70,26 @@ function Home() {
                 setRooms(documents)
             })
         } catch (error) {
-            
+            console.log(error)
         }
+
+        try {
+            const usersRef = await firebase.firestore().collection("users")
+            usersRef.onSnapshot(snap => {
+                let documents = [];
+                snap.forEach(doc => {
+                    documents.push({...doc.data(), userId: doc.id})
+                })
+                userDispatch({type: "LOAD_ALL_USERS", payload: documents})
+                fetchCurrentUser(documents)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchDatas()
     },[])
     return (
         <>

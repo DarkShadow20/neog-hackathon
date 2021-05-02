@@ -1,7 +1,7 @@
 import './App.css';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
-import {Login,SignUp,PrivateRoute,Home, PageNotFound} from "./pages";
-import {Room} from "./Room/Room";
+import {Login,PrivateRoute,Home, PageNotFound} from "./pages";
+import {Room} from "./pages/Room/Room";
 
 import {firebaseConfig} from "./Config/firebaseConfig"
 import firebase from "firebase"
@@ -16,7 +16,6 @@ function App() {
       <Router>
         <Routes>
           <PrivateRoute path="/" element={<Home />} />
-          <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} /> 
           <PrivateRoute path="/room" element ={<Room/>}/>
           <Route path="/*" element={<PageNotFound/>}/>

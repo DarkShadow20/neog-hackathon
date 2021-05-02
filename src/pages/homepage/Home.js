@@ -6,41 +6,13 @@ import firebase from "firebase/app";
 import { useUser } from "../../context";
 import { useAuth } from "../../hooks";
 
-export const roomsOld=[{
-    id:1,
-    topic:"Simply Gaming",
-    adminId:"Sumit",
-    readers:[],
-    accessMembers:[],
-    Messages:[]
-},{
-    id:2,
-    topic:"avalon meet",
-    adminId:"Varun",
-    readers:[],
-    accessMembers:[],
-    Messages:[]
-},{
-    id:3,
-    topic:"Songs",
-    adminId:"Kunal",
-    readers:[],
-    accessMembers:[],
-    Messages:[]
-},{
-    id:4,
-    topic:"Reading",
-    adminId:"Bill",
-    readers:[],
-    accessMembers:[],
-    Messages:[]
-}]
 
 function Home() {
     const divRef=useRef(null)
     const inputRef=useRef(null)
     const [text,setText]=useState("");
     const [rooms, setRooms] = useState([])
+    //eslint-disable-next-line
     const [errorMessage, setErrorMessage] = useState("")
 
     const {userState,userDispatch} = useUser()
@@ -67,6 +39,7 @@ function Home() {
     const removeRoomBtn = (desiredRoomId) => {
         const foundRoom = rooms.find(room => room.roomId === desiredRoomId)
         if(foundRoom.adminId === currentUser.userId){
+            //eslint-disable-next-line
             const roomRef = firebase.firestore().collection("rooms").doc(desiredRoomId).delete()
         }
         else {
@@ -137,6 +110,7 @@ function Home() {
 
     useEffect(() => {
         fetchDatas()
+        //eslint-disable-next-line
     },[])
     return (
         <>

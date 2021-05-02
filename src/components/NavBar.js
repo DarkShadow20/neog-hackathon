@@ -45,13 +45,6 @@ function NavBar() {
                                     >
                                       <div>Login</div>
                                     </button>
-                                    <button
-                                      onClick={() => {
-                                        navigate("/signup");
-                                      }}
-                                    >
-                                      <div>Sign up</div>
-                                    </button>
                                   </>
                                 )}
                             </div>

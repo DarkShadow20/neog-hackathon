@@ -1,8 +1,8 @@
-import React, { useState,useReducer, useEffect, useRef } from 'react'
-import { Message } from '../Message/Message'
+import React, { useState, useEffect, useRef } from 'react'
+import { Message } from '../../Message/Message'
 import {useLocation} from "react-router-dom";
 import "./Room.css"
-import { useUser } from '../context';
+import { useUser } from '../../context';
 import firebase from "firebase/app"
 
 export const Room = (props) => {
@@ -44,6 +44,7 @@ export const Room = (props) => {
 
     useEffect(() => {
         fetchRoom(roomId)
+        //eslint-disable-next-line
     },[refetch])
 
     const scrollToBottom=()=>{
@@ -53,132 +54,11 @@ export const Room = (props) => {
             block:"nearest"
         })
     }
-    //const newReaders=readers.map((items)=>({userId:items , isRaisedHand:false }))
-    //setReader3(newReaders)
-    //console.log(newReaders)
-    //console.log(accessMembers,readers,messages,users,currentUser)
-    // const users = [
-    //     {
-    //         id: "abc",
-    //         name: "Rupam",
-    //         email: "rupam@gmail.com",
-    //         password: "123456"
-    //     },
-    //     {
-    //         id: "abc1",
-    //         name: "Kunal",
-    //         email: "kunal@gmail.com",
-    //         password: "123456"
-    //     },
-    //     {
-    //         id: "abc2",
-    //         name: "Ram",
-    //         email: "ram@gmail.com",
-    //         password: "123456"
-    //     },
-    //     {
-    //         id: "admin",
-    //         name: "Admin",
-    //         email: "admin@gmail.com",
-    //         password: "123456"
-    //     },
-    // ]
 
-    // const currentUser = {
-    //     userId: "abc",
-    //     name: "Rupam",
-    //     email: "rupam@gmail.com",
-    //     password: "123456"
-    // }
-
-    //const readers = ["abc","abc1","admin"]
-
-    // const accessmembers = ["abc", "abc1", "admin"]
-    // console.log(accessmembers)
     const primeMember=accessMembers.find((items)=>items===currentUser.userId)
-    // const initialMesasges = [
-    //     {
-    //         text: "I love react",
-    //         userId: "abc",
-    //         timestamp: 1,
-    //         name: "Rupam"
-    //     },
-    //     {
-    //         text: "I also like react but angular is not that bad",
-    //         userId: "abc1",
-    //         timestamp: 2,
-    //         name: "Kunal"
-    //     },
-    //     {
-    //         text: "You should try it once",
-    //         userId: "abc1",
-    //         timestamp: 3,
-    //         name: "Kunal"
-    //     },
-    //     {
-    //         text: "Oh..if you are saying I should try once.",
-    //         userId: "abc",
-    //         timestamp: 4,
-    //         name: "Rupam"
-    //     },
-    //     {
-    //         text: "Yaa you can",
-    //         userId: "abc1",
-    //         timestamp: 5,
-    //         name: "Kunal"
-    //     },
-    //     {
-    //         text: "All of you. Give valid points",
-    //         userId: "admin",
-    //         timestamp: 6,
-    //         name: "Admin"
-    //     },
-    //     {
-    //         text: "Ok. we are deviating",
-    //         userId: "abc1",
-    //         timestamp: 7,
-    //         name: "Kunal"
-    //     },
-    //     {
-    //         text: "Ok give some advantages over that",
-    //         userId: "abc",
-    //         timestamp: 8,
-    //         name: "Rupam"
-    //     },
-    //     {
-    //         text: "and some disadvantages too",
-    //         userId: "abc",
-    //         timestamp: 9,
-    //         name: "Rupam"
-    //     },
-    //     {
-    //         text: "Here are some advantages",
-    //         userId: "abc1",
-    //         timestamp: 10,
-    //         name: "Kunal"
-    //     },
-
-    // ]
-
-
-   // const [state,dispatch]=useReducer(reducer,messages)
-
-  /*  function reducer(state,action){
-        switch(action.type){
-            case 'ADD_MESSAGE':
-                return[...state,{
-                    text:action.payload.msg,
-                    userId: currentUser.userId,
-                    timeStamp:action.payload.timeStamp,
-                    name: currentUser.name}]
-            default:
-                return {...state}
-        }
-    }*/
+    
     function msgHandler(){
         let timeStamp = new Date().getTime();
-        //dispatch({type:"ADD_MESSAGE",payload: { msg, timeStamp }})
-
         const newMessage = {
                     text: msg,
                     userId: currentUser.userId,

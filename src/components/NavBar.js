@@ -52,20 +52,6 @@ function NavBar() {
                                     >
                                       <div>Sign up</div>
                                     </button>
-                                    <button
-                                      onClick={() => {
-                                        navigate("/room");
-                                      }}
-                                    >
-                                      <div>Room</div>
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        navigate("/");
-                                      }}
-                                    >
-                                      <div>Chat</div>
-                                    </button>
                                   </>
                                 )}
                             </div>

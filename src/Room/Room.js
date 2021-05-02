@@ -226,8 +226,6 @@ export const Room = (props) => {
         setRefetch(!refetch)
     }
 
-   
-
     return (
         <div className="room-container">
             <div className="room-left-section">
@@ -264,7 +262,7 @@ export const Room = (props) => {
                         return readers.map(reader => {
                             if(reader.userId === user.userId){
                                 return <div className="reader-div">
-                                            <p>{reader.name}</p>
+                                            {reader.userId===adminId?<p><span className="admin">Admin</span>{reader.name}</p>:<p>{reader.name}</p>}
                                             <div></div>
                                         </div>
                             }

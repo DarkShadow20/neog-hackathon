@@ -94,18 +94,19 @@ export const Login = () => {
         <span className="login-errorPrompt">{error}</span>
       </div>
 
-      <button>
+      <p style={{backgroundColor:"#2B2B31"}}>
+        New User{" "}
         <Link
           state={{
             from: location?.state?.from ? location.state.from : "/"
           }}
           replace
           to="/signup"
-          style={{ "color": "#fff" , "textDecoration": "none" }}
+          style={{backgroundColor:"#2B2B31"}}
         >
           Sign up
         </Link>
-      </button>
+      </p>
       <button onClick={loginBtnHandler}>Login</button>
     </div>
     </>

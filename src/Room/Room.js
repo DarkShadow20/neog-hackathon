@@ -1,4 +1,4 @@
-import React, { useState,useReducer, useEffect } from 'react'
+import React, { useState,useReducer, useEffect, useRef } from 'react'
 import { Message } from '../Message/Message'
 import {useLocation} from "react-router-dom";
 import "./Room.css"
@@ -19,7 +19,7 @@ export const Room = (props) => {
     const [raisedHands, setRaisedHands] = useState(location.state.from.raisedHands)
     const [messages, setMessages] = useState(location.state.from.messages)
 
-
+    const messagesRef = useRef(null);
     const {topic,adminId, roomId}=location.state.from;
 
 
@@ -33,6 +33,7 @@ export const Room = (props) => {
                 setReaders(data.readers)
                 setRaisedHands(data.raisedHands)
                 setMessages(data.messages)
+                scrollToBottom();
               } else {
                 console.log("No such document!");
               }
@@ -45,7 +46,13 @@ export const Room = (props) => {
         fetchRoom(roomId)
     },[refetch])
 
-
+    const scrollToBottom=()=>{
+        console.log("inside bottom")
+        messagesRef.current.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        })
+    }
     //const newReaders=readers.map((items)=>({userId:items , isRaisedHand:false }))
     //setReader3(newReaders)
     //console.log(newReaders)
@@ -183,7 +190,6 @@ export const Room = (props) => {
         roomsRef.update({
             messages: firebase.firestore.FieldValue.arrayUnion(newMessage)
         })
-        
         setRefetch(!refetch)
         setMsg("")
     }
@@ -225,26 +231,30 @@ export const Room = (props) => {
     return (
         <div className="room-container">
             <div className="room-left-section">
-                <h2>{topic}{" "}{currentUser.name}</h2>
+                <div className="heading">
+                    <h2>{topic}</h2>
+                    <span className="current-user">{currentUser.name}</span>
+                </div>
                 <div className="chat-area">
                     {messages.map((message, idx) => {
                         return <Message message={message} userId={currentUser.userId} key={idx}/>
                     })}
+                    <div ref={messagesRef}/>
                 </div>
-                {primeMember?<div className="input-group mb-3 message">
-                                        <input className="form-control" placeholder="Type a message" onChange={(e)=>setMsg(e.target.value)}/>
-                                        <button className="btn btn-primary" onClick={()=>msgHandler()}>Send</button>
-                                    </div>
-                        :<button onClick={()=>permissionHandler(currentUser.userId)}>Raise Hand</button>}
+                {primeMember?<div className="input-group mb-3 message" >
+                        <input className="form-control" placeholder="Type a message" onChange={(e)=>setMsg(e.target.value)}/>
+                        <button className="btn btn-primary" onClick={()=>msgHandler()}>Send</button>
+                            </div>
+                :<button onClick={()=>permissionHandler(currentUser.userId)}>Raise Hand</button>}
             </div>
             <div className="room-right-section">
-                <h2>Readers</h2>
+                <h2>📖{" "}Readers</h2>
                 <div className="reader-list">
                     {currentUser.userId === adminId ? <>{users.map(user => {
                         return readers.map(reader => {
                             if(reader.userId === user.userId){
                                 return <div className="reader-div">
-                                            <p>{reader.name}</p>
+                                            {reader.userId===adminId?<p><span className="admin">Admin</span>{reader.name}</p>:<p>{reader.name}</p>}
                                             <button className="btn btn-success" onClick={() => giveAccess(reader.userId)}>Access</button>
                                         </div>
                             }
@@ -263,7 +273,7 @@ export const Room = (props) => {
                     })} </>}   
                 </div>
                 <div className="reader-list">
-                    <h3>Writers</h3>
+                    <h3>✍️{" "}Writers</h3>
                    {users.map(user => {
                         return accessMembers.map(accessMember => {
                             if(accessMember === user.userId){
@@ -277,7 +287,7 @@ export const Room = (props) => {
                     })}   
                 </div>
                 <div className="reader-list">
-                    <h3>Hand Raised</h3>
+                    <h3>✋{" "}Hand Raised</h3>
                    {users.map(user => {
                         return raisedHands.map(hand => {
                             if(hand === user.userId){

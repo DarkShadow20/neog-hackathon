@@ -10,7 +10,7 @@ import firebase from "firebase/app"
 
 
 export const Login = () => {
-  const { isUserLoggedIn, setLogin, setUserName } = useAuth();
+  const { isUserLoggedIn, setLogin, setUserId } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -44,6 +44,7 @@ export const Login = () => {
 
           if(response){
            setLogin(true)
+           setUserId(response.user.uid)
             navigate(location?.state?.from ? location.state.from : "/");
           }
         } catch (error) {

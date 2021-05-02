@@ -3,11 +3,18 @@ import ReorderIcon from "@material-ui/icons/Reorder";
 import {useAuth} from "../hooks";
 import "./NavBar.css";
 import { useNavigate } from 'react-router';
+import { useUser } from '../context';
 
 function NavBar() {
     const [showLinks,setShowLinks]=useState(false)
-    const { isUserLoggedIn, setLogin} = useAuth();
+    
     const navigate=useNavigate();
+
+    const { isUserLoggedIn, setLogin} = useAuth();
+
+    const {userState} = useUser()
+    const {currentUser} = userState;
+
     return (
              <>
             <nav>
@@ -18,7 +25,7 @@ function NavBar() {
                                   <>
                                   <button className="username"
                                     >
-                                      <div>Hi</div>
+                                      <div>Hi {currentUser.name}</div>
                                     </button>
                                     <button
                                       onClick={() => {

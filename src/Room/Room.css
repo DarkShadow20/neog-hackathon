@@ -40,6 +40,14 @@
 }
 .room-left-section{
     position: relative;
+    margin-left: 10rem;
+}
+.btn.raiseHand{
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 2;
+    border: 1px solid var(--color1);
 }
 .admin{
     font-size: 0.6rem;
@@ -58,11 +66,12 @@
 }
 .room-right-section{
     position: fixed;
-    max-height: 50rem;
+    min-height: 50rem;
+    width: 20rem;
     overflow: scroll;
     padding: 0 1rem;
     border-left: 1px solid white;
-    right: 0rem;
+    right: 10rem;
 }
 .reader-list{
     text-align: start;

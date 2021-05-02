@@ -203,6 +203,20 @@ export const Room = (props) => {
         roomsRef.update({
             accessMembers: firebase.firestore.FieldValue.arrayUnion(desiredUserId)
         })
+        const foundUserInRaisedHand = raisedHands.find(user => user===desiredUserId)
+        if(foundUserInRaisedHand){
+            roomsRef.update({
+                raisedHands: firebase.firestore.FieldValue.arrayRemove(desiredUserId)
+            })
+        }
+        setRefetch(!refetch)
+    }
+
+    const removeAccess = (desiredUserId) => {
+        const roomsRef = firebase.firestore().collection("rooms").doc(roomId)
+        roomsRef.update({
+            accessMembers: firebase.firestore.FieldValue.arrayRemove(desiredUserId)
+        })
         setRefetch(!refetch)
     }
 
@@ -231,7 +245,7 @@ export const Room = (props) => {
                             if(reader.userId === user.userId){
                                 return <div className="reader-div">
                                             <p>{reader.name}</p>
-                                            <button className="btn btn-secondary" onClick={() => giveAccess(reader.userId)}>Access</button>
+                                            <button className="btn btn-success" onClick={() => giveAccess(reader.userId)}>Access</button>
                                         </div>
                             }
                             return null
@@ -255,6 +269,7 @@ export const Room = (props) => {
                             if(accessMember === user.userId){
                                 return <div className="reader-div">
                                             <p>{user.name}</p>
+                                            <button className="btn btn-danger" onClick={() => removeAccess(user.userId)}>Remove</button>
                                         </div>
                             }
                             return null

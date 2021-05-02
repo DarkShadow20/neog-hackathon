@@ -29,8 +29,11 @@
     text-align: start;
     padding: 1rem;
 }
-.reader{
+.reader-div{
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 1fr 5fr 1fr 2fr;
     margin-top: 0.5rem;
+}
+.reader-div p{
+    background: none;
 }

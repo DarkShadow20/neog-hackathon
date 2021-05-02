@@ -14,9 +14,9 @@ export const Room = (props) => {
     console.log(location.state.from)
     const {accessMembers,readers,messages,topic,adminId}=location.state.from;
 
-    const newReaders=readers.map((items)=>({userId:items , isRaisedHand:false }))
+    //const newReaders=readers.map((items)=>({userId:items , isRaisedHand:false }))
     //setReader3(newReaders)
-    console.log(newReaders)
+    //console.log(newReaders)
     //console.log(accessMembers,readers,messages,users,currentUser)
     // const users = [
     //     {
@@ -134,7 +134,7 @@ export const Room = (props) => {
         setMsg("")
     }
     const permissionHandler=(userId)=>{
-        newReaders.map((items)=>{
+        readers.map((items)=>{
             if(items.userId===userId){
                 return items.isRaisedHand=true;
             }
@@ -162,20 +162,24 @@ export const Room = (props) => {
                 <div className="reader-list">
                     {currentUser.userId === adminId ? <>{users.map(user => {
                         return readers.map(reader => {
-                            if(reader === user.userId){
-                                return <div className="reader">
+                            if(reader.userId === user.userId){
+                                return <div className="reader-div">
+                                            <div>{reader.isRaisedHand && "✋"}</div>
                                             <h5>{user.name}</h5>
+                                            <div>{reader.hasAccess && "✔️"}</div>
                                             <button className="btn btn-secondary">Access</button>
                                         </div>
                             }
                             return null
                         })
                     })}</>: <>{users.map(user => {
-                        return newReaders.map(reader => {
+                        return readers.map(reader => {
                             if(reader.userId === user.userId){
-                                return <div className="reader">
-                                            {reader.isRaisedHand && <p>✋</p>}
-                                            <h5>{user.name}</h5>
+                                return <div className="reader-div">
+                                            <div>{reader.isRaisedHand && "✋"}</div>
+                                            <p>{user.name}</p>
+                                            <div>{reader.hasAccess && "✔️"}</div>
+                                            <div></div>
                                         </div>
                             }
                             return null

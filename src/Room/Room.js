@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState,useReducer } from 'react'
 import { Message } from '../Message/Message'
 import {useLocation} from "react-router-dom";
 import "./Room.css"
 
 export const Room = (props) => {
     const location = useLocation();
+    const [msg,setMsg]=useState();
     console.log(location.state)
     const users = [
         {
@@ -34,7 +35,7 @@ export const Room = (props) => {
     ]
 
     const currentUser = {
-        userId: "abc2",
+        userId: "abc",
         name: "Rupam",
         email: "rupam@gmail.com",
         password: "123456"
@@ -44,7 +45,7 @@ export const Room = (props) => {
 
     const accessMembers = ["abc", "abc1", "admin"]
     const primeMember=accessMembers.find((items)=>items===currentUser.userId)
-    const mesasges = [
+    const initialMesasges = [
         {
             text: "I love react",
             userId: "abc",
@@ -107,18 +108,32 @@ export const Room = (props) => {
         },
 
     ]
+    function reducer(state,action){
+        switch(action.type){
+            case 'ADD_MESSAGE':
+                return[...state,{text:action.payload.msg,userId:action.payload.primeMember,timeStamp:action.payload.timeStamp,name:"Admin"}]
+            default:
+                return {...state}
+        }
+    }
+    function msgHandler(primeMember){
+        let timeStamp = new Date().getTime();
+        dispatch({type:"ADD_MESSAGE",payload:{msg,primeMember,timeStamp}})
+        setMsg("")
+    }
+    const [state,dispatch]=useReducer(reducer,initialMesasges)
     return (
         <div className="room-container">
             <div className="room-left-section">
                 <h2>Topic</h2>
                 <div className="chat-area">
-                    {mesasges.map((message, idx) => {
+                    {state.map((message, idx) => {
                         return <Message message={message} userId={currentUser.userId} key={idx}/>
                     })}
                 </div>
                 {primeMember?<div className="input-group mb-3 message">
-                                        <input className="form-control" placeholder="Type a message"/>
-                                        <button className="btn btn-primary">Send</button>
+                                        <input className="form-control" placeholder="Type a message" onChange={(e)=>setMsg(e.target.value)}/>
+                                        <button className="btn btn-primary" onClick={()=>msgHandler(primeMember)}>Send</button>
                                     </div>
                         :<button>Raise Hand</button>}
             </div>

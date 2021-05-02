@@ -5,6 +5,10 @@ import { validateUserInput } from "../utils";
 import axios from "axios";
 import "./Login.css";
 import { NavBar } from "../../components";
+import firebase from "firebase/app"
+
+
+
 export const Login = () => {
   const { isUserLoggedIn, setLogin, setUserName } = useAuth();
   const location = useLocation();
@@ -14,10 +18,11 @@ export const Login = () => {
   const [error, setError] = useState("");
   const [togglePassword, setTogglePassword] = useState(true);
 
-  const loginBtnHandler = () => {
+  const loginBtnHandler = async (event) => {
+    event.preventDefault();
     if (validateUserInput({ email }).checkEmail) {
       setError("");
-      axios
+      /*axios
         .post("https://hackathon.kunalgupta9.repl.co/users", {
           email,
           password
@@ -26,13 +31,24 @@ export const Login = () => {
           if (!res.data.success) {
             setError("Email or password didn't match!");
           }
-          setLogin(res.data.success);
+         setLogin(res.data.success);
           if (res.data.success) {
             console.log(location.state.from)
             navigate(location?.state?.from ? location.state.from : "/");
           }
-          setUserName(res.data.name);
-        });
+         setUserName(res.data.name);
+        });*/
+        try {
+          const response = await firebase.auth().signInWithEmailAndPassword(email,password)
+          const userId = response.user.uid
+
+          if(response){
+           setLogin(true)
+            navigate(location?.state?.from ? location.state.from : "/");
+          }
+        } catch (error) {
+          setError(error.message)
+        }
     } else {
       setError("Enter valid email!");
     }
@@ -46,7 +62,6 @@ export const Login = () => {
         <Navigate to={location?.state?.from ? location.state.from : "/"} />
       )}
       <h1>Login</h1>
-
       <div className="login-inputWrapper">
         <label>
           Email

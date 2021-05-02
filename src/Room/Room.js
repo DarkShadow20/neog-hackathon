@@ -1,18 +1,50 @@
-import React, { useState,useReducer } from 'react'
+import React, { useState,useReducer, useEffect } from 'react'
 import { Message } from '../Message/Message'
 import {useLocation} from "react-router-dom";
 import "./Room.css"
 import { useUser } from '../context';
+import firebase from "firebase/app"
 
 export const Room = (props) => {
     const location = useLocation();
     const [msg,setMsg]=useState();
-    const [permission,setPermission]=useState(false)
-    const [reader3,setReader3]=useState([])
+    
+    const [refetch, setRefetch] = useState(false)
+
     const {userState}=useUser();
     const {users,currentUser}=userState
-    console.log(location.state.from)
-    const {accessMembers,readers,messages,topic,adminId}=location.state.from;
+
+    const [accessMembers, setAccessMembers] = useState(location.state.from.accessMembers)
+    const [readers, setReaders] = useState(location.state.from.readers)
+    const [raisedHands, setRaisedHands] = useState(location.state.from.raisedHands)
+    const [messages, setMessages] = useState(location.state.from.messages)
+
+
+    const {topic,adminId, roomId}=location.state.from;
+
+
+    const fetchRoom = async (roomId) => {
+            const roomsRef = firebase.firestore().collection("rooms").doc(roomId)
+            roomsRef.get()
+            .then(function(doc) {
+              if (doc.exists) {
+                const data = doc.data()
+                setAccessMembers(data.accessMembers)
+                setReaders(data.readers)
+                setRaisedHands(data.raisedHands)
+                setMessages(data.messages)
+              } else {
+                console.log("No such document!");
+              }
+            }).catch(function(error) {
+              console.log("Error getting document:", error);
+            });  
+    }
+
+    useEffect(() => {
+        fetchRoom(roomId)
+    },[refetch])
+
 
     //const newReaders=readers.map((items)=>({userId:items , isRaisedHand:false }))
     //setReader3(newReaders)
@@ -120,40 +152,73 @@ export const Room = (props) => {
     //     },
 
     // ]
-    function reducer(state,action){
+
+
+   // const [state,dispatch]=useReducer(reducer,messages)
+
+  /*  function reducer(state,action){
         switch(action.type){
             case 'ADD_MESSAGE':
-                return[...state,{text:action.payload.msg,userId:action.payload.primeMember,timeStamp:action.payload.timeStamp,name:"Admin"}]
+                return[...state,{
+                    text:action.payload.msg,
+                    userId: currentUser.userId,
+                    timeStamp:action.payload.timeStamp,
+                    name: currentUser.name}]
             default:
                 return {...state}
         }
-    }
-    function msgHandler(primeMember){
+    }*/
+    function msgHandler(){
         let timeStamp = new Date().getTime();
-        dispatch({type:"ADD_MESSAGE",payload:{msg,primeMember,timeStamp}})
-        setMsg("")
-    }
-    const permissionHandler=(userId)=>{
-        readers.map((items)=>{
-            if(items.userId===userId){
-                return items.isRaisedHand=true;
-            }
-            return items
+        //dispatch({type:"ADD_MESSAGE",payload: { msg, timeStamp }})
+
+        const newMessage = {
+                    text: msg,
+                    userId: currentUser.userId,
+                    timeStamp: timeStamp,
+                    name: currentUser.name
+        }
+        
+        const roomsRef = firebase.firestore().collection("rooms").doc(roomId)
+        roomsRef.update({
+            messages: firebase.firestore.FieldValue.arrayUnion(newMessage)
         })
+        
+        setRefetch(!refetch)
     }
-    const [state,dispatch]=useReducer(reducer,messages)
+
+
+
+    const permissionHandler=(desiredUserId)=>{
+        const roomsRef = firebase.firestore().collection("rooms").doc(roomId)
+        roomsRef.update({
+            raisedHands: firebase.firestore.FieldValue.arrayUnion(desiredUserId)
+        })
+        setRefetch(!refetch)
+    }
+
+    const giveAccess = (desiredUserId) => {
+        const roomsRef = firebase.firestore().collection("rooms").doc(roomId)
+        roomsRef.update({
+            accessMembers: firebase.firestore.FieldValue.arrayUnion(desiredUserId)
+        })
+        setRefetch(!refetch)
+    }
+
+   
+
     return (
         <div className="room-container">
             <div className="room-left-section">
                 <h2>{topic}{" "}{currentUser.name}</h2>
                 <div className="chat-area">
-                    {state.map((message, idx) => {
+                    {messages.map((message, idx) => {
                         return <Message message={message} userId={currentUser.userId} key={idx}/>
                     })}
                 </div>
                 {primeMember?<div className="input-group mb-3 message">
                                         <input className="form-control" placeholder="Type a message" onChange={(e)=>setMsg(e.target.value)}/>
-                                        <button className="btn btn-primary" onClick={()=>msgHandler(primeMember)}>Send</button>
+                                        <button className="btn btn-primary" onClick={()=>msgHandler()}>Send</button>
                                     </div>
                         :<button onClick={()=>permissionHandler(currentUser.userId)}>Raise Hand</button>}
             </div>
@@ -164,10 +229,8 @@ export const Room = (props) => {
                         return readers.map(reader => {
                             if(reader.userId === user.userId){
                                 return <div className="reader-div">
-                                            <div>{reader.isRaisedHand && "✋"}</div>
-                                            <h5>{user.name}</h5>
-                                            <div>{reader.hasAccess && "✔️"}</div>
-                                            <button className="btn btn-secondary">Access</button>
+                                            <p>{reader.name}</p>
+                                            <button className="btn btn-secondary" onClick={() => giveAccess(reader.userId)}>Access</button>
                                         </div>
                             }
                             return null
@@ -176,18 +239,39 @@ export const Room = (props) => {
                         return readers.map(reader => {
                             if(reader.userId === user.userId){
                                 return <div className="reader-div">
-                                            <div>{reader.isRaisedHand && "✋"}</div>
-                                            <p>{user.name}</p>
-                                            <div>{reader.hasAccess && "✔️"}</div>
+                                            <p>{reader.name}</p>
                                             <div></div>
                                         </div>
                             }
                             return null
                         })
-                    })} </>}
-
-
-                   
+                    })} </>}   
+                </div>
+                <div className="reader-list">
+                    <h3>Writers</h3>
+                   {users.map(user => {
+                        return accessMembers.map(accessMember => {
+                            if(accessMember === user.userId){
+                                return <div className="reader-div">
+                                            <p>{user.name}</p>
+                                        </div>
+                            }
+                            return null
+                        })
+                    })}   
+                </div>
+                <div className="reader-list">
+                    <h3>Hand Raised</h3>
+                   {users.map(user => {
+                        return raisedHands.map(hand => {
+                            if(hand === user.userId){
+                                return <div className="reader-div">
+                                            <p>{user.name}</p>
+                                        </div>
+                            }
+                            return null
+                        })
+                    })}   
                 </div>
             </div>
         </div>

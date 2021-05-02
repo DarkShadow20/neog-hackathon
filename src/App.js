@@ -1,6 +1,6 @@
 import './App.css';
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
-import {Login,SignUp,PrivateRoute,Home} from "./pages";
+import {Login,SignUp,PrivateRoute,Home, PageNotFound} from "./pages";
 import {Room} from "./Room/Room";
 
 import {firebaseConfig} from "./Config/firebaseConfig"
@@ -19,6 +19,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} /> 
           <PrivateRoute path="/room" element ={<Room/>}/>
+          <Route path="/*" element={<PageNotFound/>}/>
         </Routes>
       </Router>
     </div>

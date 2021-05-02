@@ -18,7 +18,7 @@ function NavBar() {
     return (
              <>
             <nav>
-                    <div className="Logo">connectNeoG</div>
+                    <div className="Logo">Connect-<span className="logo-bold">neoG</span></div>
                         <div className="leftSide">
                             <div className="link" id={showLinks?"hidden":""}>
                                 {isUserLoggedIn ? (

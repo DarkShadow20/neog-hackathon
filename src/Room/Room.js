@@ -197,11 +197,15 @@ export const Room = (props) => {
 
 
     const permissionHandler=(desiredUserId)=>{
+        const alreadyRaisedHand = raisedHands.find(hand => hand === desiredUserId)
+        if(alreadyRaisedHand){
+            alert("Your hand is raised")
+        }else {
         const roomsRef = firebase.firestore().collection("rooms").doc(roomId)
         roomsRef.update({
             raisedHands: firebase.firestore.FieldValue.arrayUnion(desiredUserId)
         })
-        setRefetch(!refetch)
+        setRefetch(!refetch)}
     }
 
     const giveAccess = (desiredUserId) => {
@@ -243,12 +247,12 @@ export const Room = (props) => {
                         <input className="form-control" placeholder="Type a message" onChange={(e)=>setMsg(e.target.value)}/>
                         <button className="btn btn-primary" onClick={()=>msgHandler()}>Send</button>
                             </div>
-                :<button onClick={()=>permissionHandler(currentUser.userId)}>Raise Hand</button>}
+                :<button onClick={()=>permissionHandler(currentUser.userId)} className="btn raiseHand">Raise Hand✋</button>}
             </div>
             <div className="room-right-section">
                 <h2>📖{" "}Readers</h2>
                 <div className="reader-list">
-                    {currentUser.userId === adminId ? <>{users.map(user => {
+                    {currentUser.userId === adminId ? <div>{users.map(user => {
                         return readers.map(reader => {
                             if(reader.userId === user.userId){
                                 return <div className="reader-div">
@@ -258,7 +262,7 @@ export const Room = (props) => {
                             }
                             return null
                         })
-                    })}</>: <>{users.map(user => {
+                    })}</div>: <div>{users.map(user => {
                         return readers.map(reader => {
                             if(reader.userId === user.userId){
                                 return <div className="reader-div">
@@ -268,21 +272,31 @@ export const Room = (props) => {
                             }
                             return null
                         })
-                    })} </>}   
+                    })} </div>}   
                 </div>
                 <div className="reader-list">
                     <h3>✍️{" "}Writers</h3>
-                   {users.map(user => {
+                    {currentUser.userId === adminId ? <div> {users.map(user => {
                         return accessMembers.map(accessMember => {
                             if(accessMember === user.userId){
                                 return <div className="reader-div">
                                             <p>{user.name}</p>
-                                            <button className="btn btn-danger" onClick={() => removeAccess(user.userId)}>Remove</button>
+                                            {user.userId !== adminId ? <button className="btn btn-danger" onClick={() => removeAccess(user.userId)}>Remove</button> : null}
                                         </div>
                             }
                             return null
                         })
-                    })}   
+                    })} </div> : <div> {users.map(user => {
+                        return accessMembers.map(accessMember => {
+                            if(accessMember === user.userId){
+                                return <div className="reader-div">
+                                            <p>{user.name}</p>
+                                            <div></div>
+                                        </div>
+                            }
+                            return null
+                        })
+                    })} </div>}
                 </div>
                 <div className="reader-list">
                     <h3>✋{" "}Hand Raised</h3>

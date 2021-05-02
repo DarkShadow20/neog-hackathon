@@ -93,7 +93,7 @@ export const Login = () => {
         </label>
         <span className="login-errorPrompt">{error}</span>
       </div>
-
+      <button onClick={loginBtnHandler}>Login</button>
       <p style={{backgroundColor:"#2B2B31"}}>
         New User{" "}
         <Link
@@ -107,7 +107,7 @@ export const Login = () => {
           Sign up
         </Link>
       </p>
-      <button onClick={loginBtnHandler}>Login</button>
+      
     </div>
     </>
   );

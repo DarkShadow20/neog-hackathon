@@ -1,9 +1,10 @@
 import "./Home.css";
 import NavBar from '../../components/NavBar';
 import { Link } from 'react-router-dom';
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import firebase from "firebase/app";
 
-export const rooms=[{
+export const roomsOld=[{
     id:1,
     topic:"Simply Gaming",
     adminId:"Sumit",
@@ -37,9 +38,27 @@ function Home() {
     const divRef=useRef(null)
     const inputRef=useRef(null)
     const [text,setText]=useState("");
+    const [rooms, setRooms] = useState([])
+
+
     function clickHandler(){
         
     }
+
+    useEffect(async () => {
+        try {
+            const roomsRef = await firebase.firestore().collection("rooms")
+            roomsRef.onSnapshot(snap => {
+                let documents = [];
+                snap.forEach(doc => {
+                    documents.push({...doc.data(), roomId: doc.id})
+                })
+                setRooms(documents)
+            })
+        } catch (error) {
+            
+        }
+    },[])
     return (
         <>
             <NavBar/>
@@ -52,7 +71,7 @@ function Home() {
                     replace
                     to="/room"
                         >
-                        <div className="rooms"  key={items.id}>
+                        <div className="rooms" key={items.roomId}>
                             Channel Name: {items.topic}<br/>
                             Admin Name: {items.adminId}<br/>
                             Participants: {items.readers.length}

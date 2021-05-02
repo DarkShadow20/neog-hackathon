@@ -3,13 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider, UserProvider } from './context';
+import { AuthProvider, StoreProvider, UserProvider } from './context';
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
       <UserProvider>
-        <App />
+        <StoreProvider>
+          <App />
+        </StoreProvider>
       </UserProvider>
     </AuthProvider>
   </React.StrictMode>,

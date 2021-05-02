@@ -7,7 +7,7 @@ import firebase from "firebase/app"
 
 export const Room = (props) => {
     const location = useLocation();
-    const [msg,setMsg]=useState();
+    const [msg,setMsg]=useState("");
     
     const [refetch, setRefetch] = useState(false)
 
@@ -185,6 +185,7 @@ export const Room = (props) => {
         })
         
         setRefetch(!refetch)
+        setMsg("")
     }
 
 
